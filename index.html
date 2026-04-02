@@ -19,12 +19,13 @@
       --text: #f5f5f2;
       --muted: rgba(245,245,242,0.68);
       --accent: #d9d0c3;
-      --accent-2: #bcae9f;
       --card: rgba(255,255,255,0.03);
       --shadow: 0 12px 30px rgba(0,0,0,0.28);
       --radius: 22px;
       --max: 1300px;
       --danger: #c98383;
+      --success: #9fbc9f;
+      --warning: #d8c59d;
     }
 
     html {
@@ -47,6 +48,10 @@
       text-decoration: none;
     }
 
+    button, input, textarea {
+      font-family: inherit;
+    }
+
     .wrap {
       width: min(100% - 40px, var(--max));
       margin: 0 auto;
@@ -57,17 +62,20 @@
       top: 0;
       z-index: 100;
       backdrop-filter: blur(12px);
-      background: rgba(15,15,16,0.72);
+      background: rgba(15,15,16,0.78);
       border-bottom: 1px solid var(--line);
     }
 
     .topbar-inner {
       width: min(100% - 40px, var(--max));
       margin: 0 auto;
-      height: 76px;
+      min-height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 24px;
+      padding: 12px 0;
+      flex-wrap: wrap;
     }
 
     .logo {
@@ -84,6 +92,7 @@
       display: flex;
       gap: 24px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .nav a {
@@ -96,12 +105,55 @@
       color: var(--text);
     }
 
-    .nav .btn {
+    .nav .btn,
+    .admin-btn,
+    .admin-exit-btn,
+    .action-btn,
+    .edit-btn,
+    .delete-btn,
+    .save-edit-btn,
+    .cancel-edit-btn {
       padding: 11px 18px;
       border: 1px solid var(--line);
       border-radius: 999px;
       color: var(--text);
       background: rgba(255,255,255,0.03);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .nav .btn:hover,
+    .admin-btn:hover,
+    .admin-exit-btn:hover,
+    .action-btn:hover,
+    .edit-btn:hover,
+    .delete-btn:hover,
+    .save-edit-btn:hover,
+    .cancel-edit-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .admin-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .admin-status {
+      font-size: 0.9rem;
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .admin-status.on {
+      color: #dff0d8;
+      border-color: rgba(159,188,159,0.3);
+      background: rgba(159,188,159,0.08);
     }
 
     .hero {
@@ -109,7 +161,6 @@
       display: flex;
       align-items: center;
       padding: 90px 0 70px;
-      position: relative;
       overflow: hidden;
     }
 
@@ -499,6 +550,12 @@
       resize: vertical;
     }
 
+    .file-help {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
     .board-actions {
       display: flex;
       align-items: center;
@@ -586,24 +643,133 @@
       line-height: 1.7;
     }
 
-    .post-actions {
-      margin-top: 14px;
+    .attachments {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .attachment-group-title {
+      font-size: 0.84rem;
+      color: var(--warning);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .attachment-list {
       display: flex;
-      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .attachment-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .attachment-link:hover {
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .image-grid a {
+      display: block;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .image-grid img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .post-actions {
+      margin-top: 16px;
+      display: none;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    body.admin-mode .post-actions {
+      display: flex;
+    }
+
+    .edit-btn {
+      color: #f4e6c7;
+      border-color: rgba(216,197,157,0.25);
+      background: rgba(216,197,157,0.08);
     }
 
     .delete-btn {
-      border: 1px solid rgba(201,131,131,0.25);
       color: #efc4c4;
+      border-color: rgba(201,131,131,0.25);
       background: rgba(201,131,131,0.08);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 0.82rem;
-      cursor: pointer;
     }
 
-    .delete-btn:hover {
-      background: rgba(201,131,131,0.14);
+    .edit-panel {
+      display: none;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .post-card.editing .edit-panel {
+      display: block;
+    }
+
+    .edit-panel textarea,
+    .edit-panel input {
+      width: 100%;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    .edit-panel textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .save-edit-btn {
+      color: #dff0d8;
+      border-color: rgba(159,188,159,0.3);
+      background: rgba(159,188,159,0.08);
+    }
+
+    .cancel-edit-btn {
+      color: var(--muted);
+    }
+
+    .admin-notice {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
     }
 
     footer {
@@ -689,6 +855,13 @@
   <header class="topbar">
     <div class="topbar-inner">
       <a href="#" class="logo">FM<span>305</span></a>
+
+      <div class="admin-tools">
+        <button id="adminToggleBtn" class="admin-btn" type="button">Admin Mode</button>
+        <button id="adminExitBtn" class="admin-exit-btn" type="button" style="display:none;">Exit Admin</button>
+        <div id="adminStatus" class="admin-status">관리자모드 꺼짐</div>
+      </div>
+
       <nav class="nav">
         <a href="#about">About</a>
         <a href="#fields">Fields</a>
@@ -841,6 +1014,11 @@
                 <label>내용</label>
                 <textarea name="content" maxlength="3000" placeholder="생각, 메모, 아이디어를 입력하세요." required></textarea>
               </div>
+              <div class="field">
+                <label>첨부파일</label>
+                <input type="file" name="attachments" multiple>
+                <div class="file-help">이미지, PDF, 문서 파일 등 여러 개 첨부 가능합니다.</div>
+              </div>
               <div class="board-actions">
                 <div class="board-note">입력된 글은 Fields 영역에 실시간으로 공유됩니다.</div>
                 <button type="submit" class="board-submit">Publish</button>
@@ -918,6 +1096,11 @@
                 <label>내용</label>
                 <textarea name="content" maxlength="3000" placeholder="아카이빙할 내용을 입력하세요." required></textarea>
               </div>
+              <div class="field">
+                <label>첨부파일</label>
+                <input type="file" name="attachments" multiple>
+                <div class="file-help">이미지, PDF, 문서 파일 등 여러 개 첨부 가능합니다.</div>
+              </div>
               <div class="board-actions">
                 <div class="board-note">입력된 글은 Archive 영역에 실시간으로 공유됩니다.</div>
                 <button type="submit" class="board-submit">Archive</button>
@@ -983,6 +1166,11 @@
                 <label>내용</label>
                 <textarea name="content" maxlength="3000" placeholder="작업 방향이나 기획 내용을 입력하세요." required></textarea>
               </div>
+              <div class="field">
+                <label>첨부파일</label>
+                <input type="file" name="attachments" multiple>
+                <div class="file-help">이미지, PDF, 문서 파일 등 여러 개 첨부 가능합니다.</div>
+              </div>
               <div class="board-actions">
                 <div class="board-note">입력된 글은 Works 영역에 실시간으로 공유됩니다.</div>
                 <button type="submit" class="board-submit">Share Work</button>
@@ -1026,8 +1214,9 @@
             <h3>Note</h3>
             <p>
               이메일 주소는 예시입니다. 실제 주소로 변경해서 사용하면 됩니다.
-              이후 인스타그램, PDF 저장소, 멤버 소개, 논문 업로드 기능도 확장할 수 있습니다.
+              관리자모드는 상단 버튼으로 진입할 수 있고, 첨부파일은 Firebase Storage에 저장됩니다.
             </p>
+            <div class="admin-notice">관리자 비밀번호: admin</div>
           </div>
         </div>
       </div>
@@ -1045,11 +1234,18 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
       getDatabase,
-      ref,
+      ref as dbRef,
       push,
       onValue,
-      remove
+      remove,
+      update
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import {
+      getStorage,
+      ref as storageRef,
+      uploadBytes,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyC8Wd7HPRRAkuUU9ale8JUpzwRInwBSUxw",
@@ -1064,8 +1260,39 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const storage = getStorage(app);
 
     const sections = ["fields", "archive", "works"];
+    const ADMIN_PASSWORD = "admin";
+    let isAdminMode = false;
+
+    const adminToggleBtn = document.getElementById("adminToggleBtn");
+    const adminExitBtn = document.getElementById("adminExitBtn");
+    const adminStatus = document.getElementById("adminStatus");
+
+    function setAdminMode(active) {
+      isAdminMode = active;
+      document.body.classList.toggle("admin-mode", active);
+      adminStatus.textContent = active ? "관리자모드 켜짐" : "관리자모드 꺼짐";
+      adminStatus.classList.toggle("on", active);
+      adminExitBtn.style.display = active ? "inline-flex" : "none";
+    }
+
+    adminToggleBtn.addEventListener("click", () => {
+      const pw = prompt("관리자 비밀번호를 입력하세요.");
+      if (pw === null) return;
+      if (pw === ADMIN_PASSWORD) {
+        setAdminMode(true);
+        alert("관리자모드가 활성화되었습니다.");
+      } else {
+        alert("비밀번호가 올바르지 않습니다.");
+      }
+    });
+
+    adminExitBtn.addEventListener("click", () => {
+      setAdminMode(false);
+      alert("관리자모드가 종료되었습니다.");
+    });
 
     function escapeHtml(text) {
       const div = document.createElement("div");
@@ -1088,17 +1315,92 @@
       return `<div class="empty-state">${message}</div>`;
     }
 
+    function isImageFile(file) {
+      return (file.type || "").startsWith("image/");
+    }
+
+    async function uploadFiles(files, section) {
+      const uploaded = [];
+
+      for (const file of files) {
+        const safeName = `${Date.now()}_${Math.random().toString(36).slice(2)}_${file.name}`;
+        const fileRef = storageRef(storage, `attachments/${section}/${safeName}`);
+        await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(fileRef);
+
+        uploaded.push({
+          name: file.name,
+          url,
+          type: file.type || "",
+          size: file.size || 0
+        });
+      }
+
+      return uploaded;
+    }
+
+    function renderAttachments(post) {
+      const files = Array.isArray(post.attachments) ? post.attachments : [];
+      if (!files.length) return "";
+
+      const images = files.filter(file => (file.type || "").startsWith("image/"));
+      const others = files.filter(file => !(file.type || "").startsWith("image/"));
+
+      let html = `<div class="attachments">`;
+
+      if (images.length) {
+        html += `
+          <div class="attachment-group-title">Images</div>
+          <div class="image-grid">
+            ${images.map(file => `
+              <a href="${file.url}" target="_blank" rel="noopener noreferrer">
+                <img src="${file.url}" alt="${escapeHtml(file.name)}">
+              </a>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      if (others.length) {
+        html += `
+          <div class="attachment-group-title">Files</div>
+          <div class="attachment-list">
+            ${others.map(file => `
+              <a class="attachment-link" href="${file.url}" target="_blank" rel="noopener noreferrer">
+                <span>📎</span>
+                <span>${escapeHtml(file.name)}</span>
+              </a>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      return html;
+    }
+
     function postMarkup(section, id, post) {
       return `
-        <article class="post-card">
+        <article class="post-card" data-post-id="${id}" data-section="${section}">
           <div class="post-meta">
             <span class="post-author">${escapeHtml(post.author)}</span>
             <span>${formatDate(post.createdAt)}</span>
           </div>
           <div class="post-title">${escapeHtml(post.title)}</div>
           <div class="post-content">${escapeHtml(post.content)}</div>
+          ${renderAttachments(post)}
           <div class="post-actions">
-            <button class="delete-btn" data-section="${section}" data-id="${id}">삭제</button>
+            <button class="edit-btn action-btn" data-section="${section}" data-id="${id}">수정</button>
+            <button class="delete-btn action-btn" data-section="${section}" data-id="${id}">삭제</button>
+          </div>
+
+          <div class="edit-panel">
+            <input type="text" class="edit-title-input" value="${escapeHtml(post.title)}" />
+            <textarea class="edit-content-input">${escapeHtml(post.content)}</textarea>
+            <div class="edit-actions">
+              <button class="save-edit-btn" data-section="${section}" data-id="${id}">저장</button>
+              <button class="cancel-edit-btn" data-section="${section}" data-id="${id}">취소</button>
+            </div>
           </div>
         </article>
       `;
@@ -1107,6 +1409,7 @@
     document.querySelectorAll(".board-form").forEach((form) => {
       const section = form.dataset.section;
       const submitBtn = form.querySelector(".board-submit");
+      const fileInput = form.querySelector('input[type="file"]');
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -1114,6 +1417,7 @@
         const author = form.author.value.trim();
         const title = form.title.value.trim();
         const content = form.content.value.trim();
+        const files = Array.from(fileInput.files || []);
 
         if (!author || !title || !content) {
           alert("작성자, 제목, 내용을 모두 입력해주세요.");
@@ -1122,19 +1426,27 @@
 
         submitBtn.disabled = true;
         const originalText = submitBtn.textContent;
-        submitBtn.textContent = "저장 중...";
+        submitBtn.textContent = files.length ? "파일 업로드 중..." : "저장 중...";
 
         try {
-          await push(ref(db, `boards/${section}`), {
+          let attachments = [];
+
+          if (files.length) {
+            attachments = await uploadFiles(files, section);
+          }
+
+          await push(dbRef(db, `boards/${section}`), {
             author,
             title,
             content,
+            attachments,
             createdAt: Date.now()
           });
+
           form.reset();
         } catch (error) {
           console.error(`${section} 등록 실패:`, error);
-          alert("글 등록에 실패했습니다. Firebase 규칙과 설정을 확인해주세요.");
+          alert("글 등록에 실패했습니다. Firebase Database/Storage 설정을 확인해주세요.");
         } finally {
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;
@@ -1145,7 +1457,7 @@
     sections.forEach((section) => {
       const listEl = document.getElementById(`list-${section}`);
       const statusEl = document.getElementById(`status-${section}`);
-      const boardRef = ref(db, `boards/${section}`);
+      const boardRef = dbRef(db, `boards/${section}`);
 
       onValue(
         boardRef,
@@ -1174,19 +1486,75 @@
     });
 
     document.body.addEventListener("click", async (e) => {
-      const btn = e.target.closest(".delete-btn");
-      if (!btn) return;
+      const editBtn = e.target.closest(".edit-btn");
+      const deleteBtn = e.target.closest(".delete-btn");
+      const saveBtn = e.target.closest(".save-edit-btn");
+      const cancelBtn = e.target.closest(".cancel-edit-btn");
 
-      const section = btn.dataset.section;
-      const id = btn.dataset.id;
-      const confirmed = confirm("이 글을 삭제할까요?");
-      if (!confirmed) return;
+      if (editBtn) {
+        if (!isAdminMode) {
+          alert("관리자모드에서만 수정할 수 있습니다.");
+          return;
+        }
+        const card = editBtn.closest(".post-card");
+        card.classList.add("editing");
+        return;
+      }
 
-      try {
-        await remove(ref(db, `boards/${section}/${id}`));
-      } catch (error) {
-        console.error("삭제 실패:", error);
-        alert("삭제에 실패했습니다.");
+      if (cancelBtn) {
+        const card = cancelBtn.closest(".post-card");
+        card.classList.remove("editing");
+        return;
+      }
+
+      if (saveBtn) {
+        if (!isAdminMode) {
+          alert("관리자모드에서만 수정할 수 있습니다.");
+          return;
+        }
+
+        const section = saveBtn.dataset.section;
+        const id = saveBtn.dataset.id;
+        const card = saveBtn.closest(".post-card");
+        const title = card.querySelector(".edit-title-input").value.trim();
+        const content = card.querySelector(".edit-content-input").value.trim();
+
+        if (!title || !content) {
+          alert("제목과 내용을 모두 입력해주세요.");
+          return;
+        }
+
+        try {
+          await update(dbRef(db, `boards/${section}/${id}`), {
+            title,
+            content,
+            updatedAt: Date.now()
+          });
+          card.classList.remove("editing");
+        } catch (error) {
+          console.error("수정 실패:", error);
+          alert("수정에 실패했습니다.");
+        }
+        return;
+      }
+
+      if (deleteBtn) {
+        if (!isAdminMode) {
+          alert("관리자모드에서만 삭제할 수 있습니다.");
+          return;
+        }
+
+        const section = deleteBtn.dataset.section;
+        const id = deleteBtn.dataset.id;
+        const confirmed = confirm("이 글을 삭제할까요?");
+        if (!confirmed) return;
+
+        try {
+          await remove(dbRef(db, `boards/${section}/${id}`));
+        } catch (error) {
+          console.error("삭제 실패:", error);
+          alert("삭제에 실패했습니다.");
+        }
       }
     });
   </script>
